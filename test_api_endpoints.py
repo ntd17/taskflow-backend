@@ -1,6 +1,6 @@
 import requests
 
-BASE_URL = "http://backend:5000/api"
+BASE_URL = "http://localhost:5000/api"
 
 def register_user(username, email, password):
     url = f"{BASE_URL}/auth/register"

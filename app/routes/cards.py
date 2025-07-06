@@ -18,7 +18,7 @@ def create_card(list_id):
     @apiParam {Number} position Card position (optional)
     @apiSuccess {Object} card Created card object
     """
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
     list = List.query.get_or_404(list_id)
     board = Board.query.get(list.board_id)
 
@@ -56,7 +56,7 @@ def get_cards(list_id):
     @apiParam {Number} list_id List ID
     @apiSuccess {Array} cards List of card objects
     """
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
     list = List.query.get_or_404(list_id)
     board = Board.query.get(list.board_id)
 
@@ -77,7 +77,7 @@ def get_card(card_id):
     @apiParam {Number} id Card ID
     @apiSuccess {Object} card Card object
     """
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
     card = Card.query.get_or_404(card_id)
     list = List.query.get(card.list_id)
     board = Board.query.get(list.board_id)
@@ -102,7 +102,7 @@ def update_card(card_id):
     @apiParam {Number} position New position (optional)
     @apiSuccess {Object} card Updated card object
     """
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
     card = Card.query.get_or_404(card_id)
     list = List.query.get(card.list_id)
     board = Board.query.get(list.board_id)
@@ -142,7 +142,7 @@ def delete_card(card_id):
     @apiParam {Number} id Card ID
     @apiSuccess {String} message Success message
     """
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
     card = Card.query.get_or_404(card_id)
     list = List.query.get(card.list_id)
     board = Board.query.get(list.board_id)
@@ -166,7 +166,7 @@ def reorder_cards():
     @apiParam {Array} orders Array of {id, position, list_id} objects
     @apiSuccess {String} message Success message
     """
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
     data = request.get_json()
 
     if not data or 'orders' not in data:
