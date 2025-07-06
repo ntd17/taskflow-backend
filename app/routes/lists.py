@@ -17,7 +17,7 @@ def create_list(board_id):
     @apiParam {Number} position List position (optional)
     @apiSuccess {Object} list Created list object
     """
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
     board = Board.query.get_or_404(board_id)
 
     if not any(member.id == current_user_id for member in board.members):
@@ -53,7 +53,7 @@ def get_lists(board_id):
     @apiParam {Number} board_id Board ID
     @apiSuccess {Array} lists List of list objects
     """
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
     board = Board.query.get_or_404(board_id)
 
     if not any(member.id == current_user_id for member in board.members):
@@ -75,7 +75,7 @@ def update_list(list_id):
     @apiParam {Number} position New position (optional)
     @apiSuccess {Object} list Updated list object
     """
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
     list = List.query.get_or_404(list_id)
     board = Board.query.get(list.board_id)
 
@@ -107,7 +107,7 @@ def delete_list(list_id):
     @apiParam {Number} id List ID
     @apiSuccess {String} message Success message
     """
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
     list = List.query.get_or_404(list_id)
     board = Board.query.get(list.board_id)
 
@@ -130,7 +130,7 @@ def reorder_lists():
     @apiParam {Array} orders Array of {id, position} objects
     @apiSuccess {String} message Success message
     """
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
     data = request.get_json()
 
     if not data or 'orders' not in data:

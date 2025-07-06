@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import current_app, Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity, verify_jwt_in_request, get_jwt
 from ..models import db, Board, User, UserBoard
 
@@ -30,7 +30,7 @@ def create_board():
     if check_token_revoked():
         return jsonify({'message': 'Token has been revoked'}), 401
 
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
     current_app.logger.info(f"Current user ID from token: {current_user_id}")
     data = request.get_json()
 
@@ -56,7 +56,7 @@ def get_user_boards():
     @apiHeader {String} Authorization Bearer <access_token>
     @apiSuccess {Array} boards List of board objects
     """
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
     user = User.query.get(current_user_id)
     
     return jsonify([board.to_dict() for board in user.boards]), 200
@@ -72,7 +72,7 @@ def get_board(board_id):
     @apiParam {Number} id Board ID
     @apiSuccess {Object} board Board object
     """
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
     board = Board.query.get_or_404(board_id)
 
     if not any(member.id == current_user_id for member in board.members):
@@ -92,7 +92,7 @@ def update_board(board_id):
     @apiParam {String} title New board title
     @apiSuccess {Object} board Updated board object
     """
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
     board = Board.query.get_or_404(board_id)
 
     if not any(member.id == current_user_id for member in board.members):
@@ -118,7 +118,7 @@ def delete_board(board_id):
     @apiParam {Number} id Board ID
     @apiSuccess {String} message Success message
     """
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
     board = Board.query.get_or_404(board_id)
 
     if not any(member.id == current_user_id for member in board.members):
@@ -141,7 +141,7 @@ def add_member(board_id):
     @apiParam {String} email User email to add
     @apiSuccess {Object} board Updated board object
     """
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
     board = Board.query.get_or_404(board_id)
 
     if not any(member.id == current_user_id for member in board.members):
@@ -175,7 +175,7 @@ def remove_member(board_id, user_id):
     @apiParam {Number} user_id User ID to remove
     @apiSuccess {Object} board Updated board object
     """
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
     board = Board.query.get_or_404(board_id)
 
     if not any(member.id == current_user_id for member in board.members):
